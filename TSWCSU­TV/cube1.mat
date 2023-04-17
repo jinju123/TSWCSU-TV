@@ -1,0 +1,156 @@
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Generate data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% number of end members
+p = 5;  % fixed for this demo
+
+%SNR in dB
+SNR = 30;
+% noise bandwidth in pixels of the noise  low pass filter (Gaussian)
+bandwidth = 1000; % 10000 == iid noise
+%bandwidth = 5*pi/224; % colored noise 
+
+
+% define random states
+rand('state',10);
+randn('state',10);
+
+
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% gererate fractional abundances
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pure pixels
+x1 = eye(p);
+
+% mixtures with two materials
+x2 = x1 + circshift(eye(p),[1 0]);
+
+% mixtures with three materials
+x3 = x2 + circshift(eye(p),[2 0]);
+
+% mixtures with four  materials
+x4 = x3 + circshift(eye(p),[3 0]);
+
+% mixtures with four  materials
+x5 = x4 + circshift(eye(p),[4 0]);
+
+
+% normalize
+x2 = x2/2;
+x3 = x3/3;
+x4 = x4/4;
+x5 = x5/5;
+
+
+% background (random mixture)
+%x6 = dirichlet(ones(p,1),1)';
+x6 = [0.1149 0.0741  0.2003 0.2055, 0.4051]';   % as in the paper
+
+% build a matrix
+xt = [x1 x2 x3 x4 x5 x6];
+
+
+% build image of indices to xt
+imp = zeros(3);
+imp(2,2)=1;
+
+imind = [imp*1  imp*2 imp* 3 imp*4 imp*5;
+    imp*6  imp*7 imp* 8 imp*9 imp*10;
+    imp*11  imp*12 imp*13 imp*14 imp*15;
+    imp*16  imp*17 imp* 18 imp*19 imp*20;
+    imp*21  imp*22 imp* 23 imp*24 imp*25];
+
+imind = kron(imind,ones(5));
+
+% set backround index
+imind(imind == 0) = 26;
+
+% generare frectional abundances for all pixels
+[nl,nc] = size(imind);
+np = nl*nc;     % number of pixels
+for i=1:np
+    X(:,i) = xt(:,imind(i));
+end
+
+Xim = reshape(X',nl,nc,p);
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Generate data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% number of end members
+p = 5;  % fixed for this demo
+
+%SNR in dB
+SNR = 30;
+% noise bandwidth in pixels of the noise  low pass filter (Gaussian)
+bandwidth = 1000; % 10000 == iid noise
+%bandwidth = 5*pi/224; % colored noise 
+
+
+% define random states
+rand('state',10);
+randn('state',10);
+
+
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% gererate fractional abundances
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pure pixels
+x1 = eye(p);
+
+% mixtures with two materials
+x2 = x1 + circshift(eye(p),[1 0]);
+
+% mixtures with three materials
+x3 = x2 + circshift(eye(p),[2 0]);
+
+% mixtures with four  materials
+x4 = x3 + circshift(eye(p),[3 0]);
+
+% mixtures with four  materials
+x5 = x4 + circshift(eye(p),[4 0]);
+
+
+% normalize
+x2 = x2/2;
+x3 = x3/3;
+x4 = x4/4;
+x5 = x5/5;
+
+
+% background (random mixture)
+%x6 = dirichlet(ones(p,1),1)';
+x6 = [0.1149 0.0741  0.2003 0.2055, 0.4051]';   % as in the paper
+
+% build a matrix
+xt = [x1 x2 x3 x4 x5 x6];
+
+
+% build image of indices to xt
+imp = zeros(3);
+imp(2,2)=1;
+
+imind = [imp*1  imp*2 imp* 3 imp*4 imp*5;
+    imp*6  imp*7 imp* 8 imp*9 imp*10;
+    imp*11  imp*12 imp*13 imp*14 imp*15;
+    imp*16  imp*17 imp* 18 imp*19 imp*20;
+    imp*21  imp*22 imp* 23 imp*24 imp*25];
+
+imind = kron(imind,ones(5));
+
+% set backround index
+imind(imind == 0) = 26;
+
+% generare frectional abundances for all pixels
+[nl,nc] = size(imind);
+np = nl*nc;     % number of pixels
+for i=1:np
+    X(:,i) = xt(:,imind(i));
+end
+
+Xim = reshape(X',nl,nc,p);
